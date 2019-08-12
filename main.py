@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import re
 import json
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 
 proxies = {
   'http': 'http://142.93.80.120:3128',
@@ -29,24 +29,11 @@ US_URL = "http://www.cosstores.com/content/cos/page.countryselector.en_US.en_usd
 GER_URL = "https://www.cosstores.com/en_eur/sale.html"
 KOR_URL = "https://www.cosstores.com/kr_krw/men/sale.html"
 ORGANIC_URL = "https://www.cosstores.com/en_usd/men/trousers/product.elasticated-organic-cotton-trousers-oatmeal.0742719002.html"
-if __name__ == "__main__":
-    #html = get_html(CON_URL)
-    #soup = BeautifulSoup(html, 'html.parser')
-    #for link in soup.findAll('a', attrs={'href': re.compile("^http://")}):
-    #    print(link.get('href'))
-    html2 = get_html(ORGANIC_URL)
-    soup = BeautifulSoup(html2, 'lxml')
-    #print(soup.prettify())
-    div = soup.find("button", id="size_0742719002002")
-    # print(dir(div))
-    # print(div)
-    # print(div.text)
-    # print(div['class_'])
-    # print(div.text)
-    # print(div.keys)
-    # print(soup.find_all(class_="tooltip-text"))
 
-    chrome_options = webdriver.ChromeOptions()
+if __name__ == "__main__":
+    options = webdriver.ChromeOptions()
+    options.add_argument('headless')
+
     driver = webdriver.Chrome()
     driver.get(CON_URL)
     html = driver.page_source
@@ -54,10 +41,35 @@ if __name__ == "__main__":
     country_element = driver.find_element_by_class_name('countries')
     print('2')
     print(dir(country_element))
+
     clocked = driver.find_element_by_xpath('//a[@href="'+US_URL+'"]').click()
-    print(driver.page_source)
-    driver.find_element_by_xpath('//a[@href="'+'/en_usd/men.html'+'"]').click()
+    print("3")
+    #print(driver.page_source)
+    driver.get(ORGANIC_URL)
+    #print(driver.page_source)
+    sizes = driver.find_element_by_id("sizes")
+    xs = sizes.find_element_by_id("size_0742719002001")
+    att = xs.get_attribute('class')
+    print(att)
+    # print(sizes)
+    # print(xs)
+    # print(sizes.text)
+    # print(xs.text)
+    # spanned = driver.find_element_by_xpath("//span[@class='show-tooltip']")
+    # print(spanned)
+    # print(spanned.text)
+    # print(dir(spanned))
+    #print(spanned.text)
+
+
+    # driver.find_element_by_xpath('//a[@href="'+'/en_usd/men.html'+'"]').click()
+    # print("4")
+    # driver.find_element_by_xpath('//a[@href="'+'/en_usd/men/trousers.html'+'"]').click()
+    # print("5")
     
+    # driver.find_element_by_xpath('//a[@href="'+'/en_usd/men/trousers/product.elasticated-organic-cotton-trousers-oatmeal.0742719002.html'+'"]').click()
+    # print(driver.page_source)
+
 
     driver.close()
     
